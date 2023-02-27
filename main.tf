@@ -101,6 +101,8 @@ resource "aws_security_group" "main" {
   )
 }
 
+
+
 resource "aws_launch_template" "main" {
   name_prefix = "${var.env}-${var.component}-template"
   image_id = data.aws_ami.centos8.id
@@ -109,6 +111,7 @@ resource "aws_launch_template" "main" {
   iam_instance_profile {
     arn = aws_iam_instance_profile.profile.arn
   }
+  user_data  = base64encode(templatefile("${path.module}/user-data.sh", { component = var.component, env = var.env }))
 }
 
 #resource "aws_autoscaling_group" "asg" {
