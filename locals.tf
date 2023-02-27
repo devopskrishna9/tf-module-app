@@ -11,7 +11,7 @@ locals {
     { key = "projects", value = "roboshop" },
     { key = "business_unit", value = "ecommerce" },
     { key = "owner", value = "ecommerce-robot" },
-    { key = "name", value = "${var.env}-${var.component}"}
+    { key = "Name", value = "${var.env}-${var.component}"}
   ]
 
 }
