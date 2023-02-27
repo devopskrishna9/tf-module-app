@@ -3,3 +3,7 @@ data "aws_ami" "centos8" {
   name_regex  = "Centos-8-DevOps-Practice"
   owners      = ["973714476881"]
 }
+
+data "aws_kms_key" "key" {
+  key_id = "alias/roboshop"
+}
