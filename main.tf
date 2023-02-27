@@ -104,7 +104,7 @@ resource "aws_security_group" "main" {
 
 
 resource "aws_launch_template" "main" {
-  name_prefix = "${var.env}-${var.component}-template"
+  name = "${var.env}-${var.component}-template"
   image_id = data.aws_ami.centos8.id
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.main.id]
@@ -114,27 +114,25 @@ resource "aws_launch_template" "main" {
   user_data  = base64encode(templatefile("${path.module}/user-data.sh", { component = var.component, env = var.env }))
 }
 
-#resource "aws_autoscaling_group" "asg" {
-#  name                      = "${var.env}-${var.component}-asg"
-#  max_size                  = var.max_size
-#  min_size                  = var.min_size
-#  health_check_grace_period = 300
-#  health_check_type         = "ELB"
-#  desired_capacity          = var.desired_capacity
-#  force_delete              = true
-#  vpc_zone_identifier       = var.subnet_ids
-#
-#  launch_template {
-#    id = aws_launch_template.main.id
-#    version = "$Latest"
-#  }
-#
-#  dynamic "tag" {
-#    for_each = local.all_tags
-#    content {
-#      key = tag.value.key
-#      value = tag.value.value
-#      propagate_at_launch = true
-#    }
-#  }
-#}
+resource "aws_autoscaling_group" "asg" {
+  name                      = "${var.env}-${var.component}-asg"
+  max_size                  = var.max_size
+  min_size                  = var.min_size
+  desired_capacity          = var.desired_capacity
+  force_delete              = true
+  vpc_zone_identifier       = var.subnet_ids
+
+  launch_template {
+    id = aws_launch_template.main.id
+    version = "$Latest"
+  }
+
+  dynamic "tag" {
+    for_each = local.all_tags
+    content {
+      key = tag.value.key
+      value = tag.value.value
+      propagate_at_launch = true
+    }
+  }
+}
