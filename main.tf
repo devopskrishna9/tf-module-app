@@ -45,6 +45,11 @@ resource "aws_iam_policy" "policy" {
         ],
         "Resource" : [ "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.${var.component}*",
                        "arn:aws:ssm:us-east-1:718756811784:parameter/nexus*"
+                       //"arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.docdb*"
+#                        "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.elasticache*",
+#                        "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.rds*",
+#                        "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.rabbitmq*"
+
         ]
       },
       {
@@ -106,27 +111,27 @@ resource "aws_launch_template" "main" {
   }
 }
 
-resource "aws_autoscaling_group" "asg" {
-  name                      = "${var.env}-${var.component}-asg"
-  max_size                  = var.max_size
-  min_size                  = var.min_size
-  health_check_grace_period = 300
-  health_check_type         = "ELB"
-  desired_capacity          = var.desired_capacity
-  force_delete              = true
-  vpc_zone_identifier       = var.subnet_ids
-
-  launch_template {
-    id = aws_launch_template.main.id
-    version = "$Latest"
-  }
-
-  dynamic "tag" {
-    for_each = local.all_tags
-    content {
-      key = tag.value.key
-      value = tag.value.value
-      propagate_at_launch = true
-    }
-  }
-}
+#resource "aws_autoscaling_group" "asg" {
+#  name                      = "${var.env}-${var.component}-asg"
+#  max_size                  = var.max_size
+#  min_size                  = var.min_size
+#  health_check_grace_period = 300
+#  health_check_type         = "ELB"
+#  desired_capacity          = var.desired_capacity
+#  force_delete              = true
+#  vpc_zone_identifier       = var.subnet_ids
+#
+#  launch_template {
+#    id = aws_launch_template.main.id
+#    version = "$Latest"
+#  }
+#
+#  dynamic "tag" {
+#    for_each = local.all_tags
+#    content {
+#      key = tag.value.key
+#      value = tag.value.value
+#      propagate_at_launch = true
+#    }
+#  }
+#}
