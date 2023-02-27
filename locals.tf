@@ -6,8 +6,12 @@ locals {
     owner = "ecommerce-robot"
   }
 
-  all_tags = merge(
-    local.common_tags,
-    { Name = "${var.env}-${var.component}-asg" }
-  )
+  all_tags = [
+    { key = "env", value = var.env },
+    { key = "projects", value = "roboshop" },
+    { key = "enbusiness_unit", value = "ecommerce" },
+    { key = "owner", value = "ecommerce-robot" }
+    { key = "name", value = "${var.env}-${var.component}"}
+  ]
+
 }

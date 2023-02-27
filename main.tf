@@ -41,10 +41,10 @@ resource "aws_autoscaling_group" "asg" {
   vpc_zone_identifier       = var.subnet_ids
 
   dynamic "tag" {
-    for_each = var.all_tags
+    for_each = local.all_tags
     content {
-      key = each.key
-      value = each.value
+      key = tag.value.key
+      value = tag.value.value
       propagate_at_launch = true
     }
   }
