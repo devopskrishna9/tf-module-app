@@ -26,46 +26,39 @@ resource "aws_iam_instance_profile" "profile" {
   role = aws_iam_role.role.name
 }
 
-#resource "aws_iam_policy" "policy" {
-#  name        = "${var.env}-${var.component}-parameter-store-policy"
-#  path        = "/"
-#  description = "${var.env}-${var.component}-parameter-store-policy"
-#
-#  policy = jsonencode({
-#    Version = "2012-10-17"
-#    Statement = [
-#      {
-#        "Sid" : "VisualEditor0",
-#        "Effect" : "Allow",
-#        "Action" : [
-#          "ssm:GetParameterHistory",
-#          "ssm:GetParametersByPath",
-#          "ssm:GetParameters",
-#          "ssm:GetParameter"
-#        ],
-#        "Resource" :   "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.${var.component}*"
-##                       "arn:aws:ssm:us-east-1:718756811784:parameter/nexus*",
-##                       "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.docdb*",
-##                        "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.elasticache*",
-##                        "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.rds*",
-##                        "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.rabbitmq*"
-#
-#
-#      },
-#      {
-#        "Sid" : "VisualEditor1",
-#        "Effect" : "Allow",
-#        "Action" : "ssm:DescribeParameters",
-#        "Resource" : "*"
-#      }
-#    ]
-#  })
-#}
-#
-#resource "aws_iam_role_policy_attachment" "role-attach" {
-#  role       = aws_iam_role.role.name
-#  policy_arn = aws_iam_policy.policy.arn
-#}
+resource "aws_iam_policy" "policy" {
+  name        = "${var.env}-${var.component}-parameter-store-policy"
+  path        = "/"
+  description = "${var.env}-${var.component}-parameter-store-policy"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
+          "ssm:GetParameterHistory",
+          "ssm:GetParametersByPath",
+          "ssm:GetParameters",
+          "ssm:GetParameter"
+        ],
+          "Resource" : "arn:aws:ssm:us-east-1:718756811784:parameter/${var.env}.${var.component}*"
+        },
+        {
+          "Sid" : "VisualEditor1",
+          "Effect" : "Allow",
+          "Action" : "ssm:DescribeParameters",
+          "Resource" : "*"
+        }
+     ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "role-attach" {
+  role       = aws_iam_role.role.name
+  policy_arn = aws_iam_policy.policy.arn
+}
 
 resource "aws_security_group" "main" {
   name        = "${var.env}-${var.component}-security_group"
