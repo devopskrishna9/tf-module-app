@@ -103,10 +103,10 @@ resource "aws_security_group" "main" {
 
 
 
-#resource "aws_launch_template" "main" {
-#  name = "${var.env}-${var.component}-template"
-#  image_id = data.aws_ami.centos8.id
-#  instance_type = var.instance_type
+resource "aws_launch_template" "main" {
+  name = "${var.env}-${var.component}-template"
+  image_id = data.aws_ami.centos8.id
+  instance_type = var.instance_type
 #  vpc_security_group_ids = [aws_security_group.main.id]
 #  //user_data  = base64encode(templatefile("${path.module}/user-data.sh", { component = var.component, env = var.env }))
 #
@@ -117,29 +117,29 @@ resource "aws_security_group" "main" {
 #  instance_market_options {
 #    market_type = "spot"
 #  }
-#}
+}
 
-#resource "aws_autoscaling_group" "asg" {
-#  name                      = "${var.env}-${var.component}-asg"
-#  max_size                  = var.max_size
-#  min_size                  = var.min_size
-#  desired_capacity          = var.desired_capacity
-#  force_delete              = true
-#  vpc_zone_identifier       = var.subnet_ids
-#
+resource "aws_autoscaling_group" "asg" {
+  name                = "${var.env}-${var.component}-asg"
+  max_size            = var.max_size
+  min_size            = var.min_size
+  desired_capacity    = var.desired_capacity
+  force_delete        = true
+  vpc_zone_identifier = var.subnet_ids
+
 #  launch_template {
-#    id = aws_launch_template.main.id
+#    id      = aws_launch_template.main.id
 #    version = "$Latest"
 #  }
 
-#  dynamic "tag" {
-#    for_each = local.all_tags
-#    content {
-#      key = tag.value.key
-#      value = tag.value.value
-#      propagate_at_launch = true
-#    }
-#  }
-#}
+  dynamic "tag" {
+    for_each = local.all_tags
+    content {
+      key = tag.value.key
+      value = tag.value.value
+      propagate_at_launch = true
+    }
+  }
+}
 
 // end
