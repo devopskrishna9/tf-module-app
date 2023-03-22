@@ -108,30 +108,30 @@ resource "aws_launch_template" "main" {
     arn = aws_iam_instance_profile.profile.arn
   }
 
-#  instance_market_options {
-#    market_type = "spot"
-#  }
+  instance_market_options {
+    market_type = "spot"
+  }
 }
 
-#resource "aws_autoscaling_group" "asg" {
-#  name                = "${var.env}-${var.component}-asg"
-#  max_size            = var.max_size
-#  min_size            = var.min_size
-#  desired_capacity    = var.desired_capacity
-#  force_delete        = true
-#  vpc_zone_identifier = var.subnet_ids
-#
-#  launch_template {
-#    id      = aws_launch_template.main.id
-#    version = "$Latest"
-#  }
-#
-#  dynamic "tag" {
-#    for_each = local.all_tags
-#    content {
-#      key = tag.value.key
-#      value = tag.value.value
-#      propagate_at_launch = true
-#    }
-#  }
-#}
+resource "aws_autoscaling_group" "asg" {
+  name                = "${var.env}-${var.component}-asg"
+  max_size            = var.max_size
+  min_size            = var.min_size
+  desired_capacity    = var.desired_capacity
+  force_delete        = true
+  vpc_zone_identifier = var.subnet_ids
+
+  launch_template {
+    id      = aws_launch_template.main.id
+    version = "$Latest"
+  }
+
+  dynamic "tag" {
+    for_each = local.all_tags
+    content {
+      key = tag.value.key
+      value = tag.value.value
+      propagate_at_launch = true
+    }
+  }
+}
